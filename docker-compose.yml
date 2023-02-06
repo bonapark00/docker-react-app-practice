@@ -1,0 +1,22 @@
+version: "3"
+services:
+
+  react:
+    build: 
+      context: . # 도커 이미지를 구성하기 위한 파일과 폴더들이 있는 위치
+      dockerfile: Dockerfile.dev
+    ports:
+     - "3000:3000" # 로컬포트:컨테이너포트
+    volumes:
+     - /usr/src/app/node_modules # 로컬과 맵핑하지 않을 도커 디렉토리
+     - ./:/usr/src/app # 현 로컬디렉토리 ~ 도커 디렉토리
+    stdin_open: true # 리액트 앱을 끌 때 필요
+
+  tests:
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    volumes:
+      - /usr/src/app/node_modules
+      - ./:/usr/src/app
+    command: ["npm", "run", "test"]
